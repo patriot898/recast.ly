@@ -1,6 +1,7 @@
 import VideoPlayer from './VideoPlayer.js';
 import Search from './Search.js';
 import VideoList from './VideoList.js';
+import searchYouTube from '../lib/searchYouTube.js'
 
 
 // var App = () => (
@@ -41,6 +42,13 @@ class App extends React.Component {
 
   }
 
+  renderNewData(newVideoData) {
+    this.setState(
+      {videoData : newVideoData}
+    )
+  }
+
+
   onClick(selectedVideo) {
     console.log('Clicked!');
     this.setState({
@@ -56,7 +64,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search />
+            <Search doSearch={this.renderNewData.bind(this)} />
           </div>
         </nav>
         <div className="row">
