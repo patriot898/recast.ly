@@ -1,9 +1,9 @@
 import searchYouTube from '../lib/searchYouTube.js'
 
-var Search = () => (
+var Search = (props) => (
   <div className="search-bar form-inline">
     <input className="form-control" type="text" />
-    <button className="btn hidden-sm-down" onClick={() => (console.log('clicked'))}>
+    <button className="btn hidden-sm-down" onClick={props.doSearch}>
       <span className="glyphicon glyphicon-search"></span>
     </button>
   </div>

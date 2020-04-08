@@ -2,6 +2,7 @@ import VideoPlayer from './VideoPlayer.js';
 import Search from './Search.js';
 import VideoList from './VideoList.js';
 import searchYouTube from '../lib/searchYouTube.js'
+import YOUTUBE_API_KEY from '../config/youtube.js'
 
 
 // var App = () => (
@@ -27,8 +28,9 @@ import searchYouTube from '../lib/searchYouTube.js'
 
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
+      currentData : this.props.videoData,
       currentVideo: {
         id: {
           videoId: 'dQw4w9WgXcQ?autoplay=1'
@@ -37,14 +39,27 @@ class App extends React.Component {
           title: 'Rick Astley - Never Gonna Give You Up (Video)',
           description: 'Rick Astley doing what he does best',
         }
+      },
+      youTubeOptions : {
+        key : YOUTUBE_API_KEY,
+        query : '',
+        max : 5
       }
     }
 
   }
 
+
+   onSearchClick() {
+     const searchString = document.getElementsByClassName('form-control')[0].value;
+     this.state.youTubeOptions.query = searchString;
+     searchYouTube(this.state.youTubeOptions, this.renderNewData.bind(this));
+   }
+
+
   renderNewData(newVideoData) {
     this.setState(
-      {videoData : newVideoData}
+      {currentData : newVideoData.items}
     )
   }
 
@@ -64,7 +79,7 @@ class App extends React.Component {
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search doSearch={this.renderNewData.bind(this)} />
+            <Search doSearch={this.onSearchClick.bind(this)} />
           </div>
         </nav>
         <div className="row">
@@ -72,7 +87,7 @@ class App extends React.Component {
             <VideoPlayer video={this.state.currentVideo}/>
           </div>
           <div className="col-md-5">
-            <div><VideoList videos={this.props.videoData} clickFunction = {this.onClick.bind(this)}/></div>
+            <div><VideoList videos={this.state.currentData} clickFunction = {this.onClick.bind(this)}/></div>
           </div>
         </div>
       </div>
@@ -80,6 +95,7 @@ class App extends React.Component {
   }
 }
 
+//searchYouTube('cats', (data) => {console.log(data)});
 // In the ES6 spec, files are "modules" and do not share a top-level scope
 // `var` declarations will only exist globally where explicitly defined
 export default App;
